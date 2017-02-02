@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
         primaryStage.setTitle("News APP");
-        Scene scene = new Scene(root, 1024, 480);
+        Scene scene = new Scene(root, 1024, 640);
         scene.getStylesheets().add(getClass().getResource("MainMenuStyleSheet.css").toExternalForm());
         //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("")));
         primaryStage.setScene(scene);
