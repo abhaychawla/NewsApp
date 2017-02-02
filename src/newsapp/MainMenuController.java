@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -51,7 +48,7 @@ public class MainMenuController implements Initializable{
     @FXML
     ImageView newsImage;
     @FXML
-    TextArea newsText;
+    Label newsText;
     private static final String USER_AGENT = "Mozilla/5.0";
 
     private final Image IMAGE_APPLE  = new Image("http://findicons.com/files/icons/832/social_and_web/64/apple.png");
@@ -95,11 +92,13 @@ public class MainMenuController implements Initializable{
 
          Object titles;
          Object urls;
+         Object discription;
 
          for (int i = 0; i < articles.length(); i++) {
              titles=articles.getJSONObject(i).get("title");
              urls=articles.getJSONObject(i).get("urlToImage");
-             newsWithImages.add(new NewsWithImages((String) titles, (String) urls));
+             discription= articles.getJSONObject(i).get("description");
+             newsWithImages.add(new NewsWithImages((String) titles, (String) urls, (String) discription));
 
 
              list.add((newsWithImages.get(i).getTitle()));
@@ -151,7 +150,7 @@ public class MainMenuController implements Initializable{
         listNews.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
                     int pos = listNews.getSelectionModel().getSelectedIndex();
                     loadNews(pos);
                 }
@@ -180,8 +179,8 @@ public class MainMenuController implements Initializable{
             }
         });
 
-        newsText.setEditable(false);
-        newsText.setFocusTraversable(false);
+
+
         newsImage.setFocusTraversable(false);
 
         //BackgroundImage backgroundImage = new BackgroundImage(new Image("https://facebookbrand.com/wp-content/themes/fb-branding/prj-fb-branding/assets/images/fb-art.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -192,14 +191,21 @@ public class MainMenuController implements Initializable{
 
     void loadNews(int pos)
     {
-        if(pos == 0) {
+       /* if(pos == 0) {
             newsImage.setImage(listOfImages[0]);
             newsText.setText("NEWS");
         }
         else if(pos == 1) {
             newsImage.setImage(listOfImages[1]);
             newsText.setText("NEWS");
-        }
+        }*/
+       System.out.println("i am here");
+        newsImage.setImage(new Image(newsWithImages.get(pos).getImageurl(), 100, 100, true,true));
+        newsText.setText(newsWithImages.get(pos).getDiscription());
+
+
+
+
     }
 
 }

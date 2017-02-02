@@ -8,9 +8,11 @@ import javafx.beans.property.SimpleStringProperty;
 public class NewsWithImages {
     private SimpleStringProperty title;
     private SimpleStringProperty imageurl;
-public NewsWithImages(String title,String imageurl){
+    private SimpleStringProperty discription;
+public NewsWithImages(String title,String imageurl,String discription){
     this.title=new SimpleStringProperty(title);
     this.imageurl=new SimpleStringProperty(imageurl);
+    this.discription=new SimpleStringProperty(discription);
 
 
 }
@@ -34,6 +36,12 @@ public NewsWithImages(String title,String imageurl){
         imageurl.set(newValue);
 
     }
+    public String getDiscription() {
+        return discription.get();
+    }
+
+
+
 
 
 }
