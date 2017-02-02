@@ -62,18 +62,28 @@ public class MainMenuController implements Initializable{
      void getNews() throws IOException, JSONException {
 
          String url = "https://newsapi.org/v1/articles?source=techcrunch&apiKey=b85f613f1fda40539e5547c64d03f345";
+         String url2=" https://newsapi.org/v1/articles?source=bbc-sport&sortBy=top&apiKey=b85f613f1fda40539e5547c64d03f345";
 
          URL obj = new URL(url);
+         URL obj2 = new URL(url2);
          HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+         HttpURLConnection con2 = (HttpURLConnection) obj2.openConnection();
          con.setRequestMethod("GET");
+         con2.setRequestMethod("GET");
 
          //add request header
          con.setRequestProperty("User-Agent", USER_AGENT);
+         con2.setRequestProperty("User-Agent", USER_AGENT);
+
          JSONObject newsJson;
+         JSONObject newsJson2;
 
          int responseCode = con.getResponseCode();
+         int responseCode2 = con2.getResponseCode();
          System.out.println("\nSending 'GET' request to URL : " + url);
+         System.out.println("\nSending 'GET' request to URL : " + url2);
          System.out.println("Response Code : " + responseCode);
+         System.out.println("Response Code : " + responseCode2);
          BufferedReader in = new BufferedReader(
                  new InputStreamReader(con.getInputStream()));
          String inputLine;
@@ -84,15 +94,28 @@ public class MainMenuController implements Initializable{
          }
          in.close();
 
+         BufferedReader in2 = new BufferedReader(
+                 new InputStreamReader(con2.getInputStream()));
+         String inputLine2;
+         StringBuffer response2 = new StringBuffer();
+
+         while ((inputLine2 = in2.readLine()) != null) {
+             response2.append(inputLine2);
+         }
+         in2.close();
+
          //print result
          System.out.println(response.toString());
          newsJson=new JSONObject(response.toString());
+         newsJson2=new JSONObject(response2.toString());
          System.out.println("YO"+newsJson);
          JSONArray articles =newsJson.getJSONArray("articles");
+         JSONArray articles2 =newsJson2.getJSONArray("articles");
 
          Object titles;
          Object urls;
          Object discription;
+         int news = 0;
 
          for (int i = 0; i < articles.length(); i++) {
              titles=articles.getJSONObject(i).get("title");
@@ -103,6 +126,21 @@ public class MainMenuController implements Initializable{
 
              list.add((newsWithImages.get(i).getTitle()));
              System.out.println("\n" +  titles);
+             news=i;
+         }
+
+         Object titles2;
+         Object urls2;
+         Object discription2;
+         for (int i = news+1; i < news+articles2.length(); i++) {
+             titles2=articles2.getJSONObject(i).get("title");
+             urls2=articles2.getJSONObject(i).get("urlToImage");
+             discription2= articles2.getJSONObject(i).get("description");
+             newsWithImages.add(new NewsWithImages((String) titles2, (String) urls2, (String) discription2));
+
+
+             list.add((newsWithImages.get(i).getTitle()));
+             System.out.println("\n" +  titles2);
          }
 
 
@@ -113,6 +151,7 @@ public class MainMenuController implements Initializable{
 
         newsText.prefWidthProperty().bind(rightVBox.widthProperty().divide(0.5));
         newsText.prefHeightProperty().bind(rightVBox.heightProperty().divide(0.5));
+
         //topButtons.prefWidthProperty().bind(topAnchorPane.widthProperty());
         //int topButtonCount = topButtons.getChildren().size();
 //        button1.prefWidthProperty().bind(topButtons.widthProperty().divide(4));
@@ -200,7 +239,7 @@ public class MainMenuController implements Initializable{
             newsText.setText("NEWS");
         }*/
        System.out.println("i am here");
-        newsImage.setImage(new Image(newsWithImages.get(pos).getImageurl(), 100, 100, true,true));
+        newsImage.setImage(new Image(newsWithImages.get(pos).getImageurl()));
         newsText.setText(newsWithImages.get(pos).getDiscription());
 
 

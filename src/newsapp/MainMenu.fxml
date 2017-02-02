@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainMenuBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newsapp.MainMenuController">
    <left>
@@ -29,10 +30,14 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="165.0" prefWidth="757.0">
                <children>
-                  <ImageView fx:id="newsImage" fitHeight="163.0" fitWidth="207.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="newsImage" fitHeight="163.0" fitWidth="754.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>
-            <Label fx:id="newsText" />
+            <Label fx:id="newsText" textAlignment="JUSTIFY" wrapText="true">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </center>
