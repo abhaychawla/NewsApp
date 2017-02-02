@@ -1,4 +1,4 @@
-package sample;
+package newsapp;
 
 public class Controller {
 }
