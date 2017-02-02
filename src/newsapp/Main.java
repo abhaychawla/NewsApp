@@ -6,13 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+        primaryStage.setTitle("News APP");
+        Scene scene = new Scene(root, 1024, 480);
+        scene.getStylesheets().add(getClass().getResource("MainMenuStyleSheet.css").toExternalForm());
+        //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("")));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
