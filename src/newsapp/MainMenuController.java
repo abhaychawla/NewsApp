@@ -1,10 +1,16 @@
 package newsapp;
 
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.FacebookFactory;
+import facebook4j.PostUpdate;
+import facebook4j.auth.AccessToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,6 +50,10 @@ public class MainMenuController implements Initializable{
 //    HBox topButtons;
     @FXML
     ImageView shareToFacebook;
+    @FXML
+    ImageView shareToInstagram;
+    @FXML
+    ImageView sharetoTwitter;
     @FXML
     ListView listNews;
     @FXML
@@ -133,14 +144,20 @@ public class MainMenuController implements Initializable{
          Object urls2;
          Object discription2;
          for (int i = news+1; i < news+articles2.length(); i++) {
-             titles2=articles2.getJSONObject(i).get("title");
-             urls2=articles2.getJSONObject(i).get("urlToImage");
-             discription2= articles2.getJSONObject(i).get("description");
-             newsWithImages.add(new NewsWithImages((String) titles2, (String) urls2, (String) discription2));
+             try {
+                 titles2 = articles2.getJSONObject(i).get("title");
+                 urls2 = articles2.getJSONObject(i).get("urlToImage");
+                 discription2 = articles2.getJSONObject(i).get("description");
+                 newsWithImages.add(new NewsWithImages((String) titles2, (String) urls2, (String) discription2));
 
 
-             list.add((newsWithImages.get(i).getTitle()));
-             System.out.println("\n" +  titles2);
+                 list.add((newsWithImages.get(i).getTitle()));
+                 System.out.println("\n" + titles2);
+             }
+             catch(Exception e)
+             {
+
+             }
          }
 
 
@@ -174,7 +191,7 @@ public class MainMenuController implements Initializable{
             @Override
             public void updateItem(String name, boolean empty) {
                 super.updateItem(name, empty);
-
+                setWrapText(true);
                 for (NewsWithImages img : newsWithImages) {
                     if (name==img.getTitle()) {
                         setText(img.getTitle());
@@ -185,6 +202,18 @@ public class MainMenuController implements Initializable{
             }
 
             });
+
+       shareToFacebook.setOnMousePressed(new EventHandler<MouseEvent>() {
+           @Override
+           public void handle(MouseEvent event) {
+                int pos = listNews.getSelectionModel().getSelectedIndex();
+               try {
+                   facebookPOST(pos);
+               } catch (Exception e)
+               {
+               }
+           }
+       });
 
         listNews.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -226,6 +255,11 @@ public class MainMenuController implements Initializable{
         //Background background = new Background(backgroundImage);
         //button3.setBackground(background);
         shareToFacebook.setImage(new Image("https://facebookbrand.com/wp-content/themes/fb-branding/prj-fb-branding/assets/images/fb-art.png"));
+        shareToInstagram.setImage(new Image("http://3835642c2693476aa717-d4b78efce91b9730bcca725cf9bb0b37.r51.cf1.rackcdn.com/Instagram_App_Large_May2016_200.png"));
+        sharetoTwitter.setImage(new Image("https://cdn1.iconfinder.com/data/icons/logotypes/32/twitter-128.png"));
+
+        Facebook facebook = new FacebookFactory().getInstance();
+
     }
 
     void loadNews(int pos)
@@ -245,6 +279,42 @@ public class MainMenuController implements Initializable{
 
 
 
+    }
+
+    void facebookPOST(int pos) {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("Posted!");
+        //ImageView iv=null;
+        //iv.setImage(new Image("http://www.clipartbest.com/cliparts/7ia/o7p/7iao7p5KT.gif"));
+        //alert.setGraphic(iv);
+        System.out.print("alert");
+
+
+         try {
+             Facebook facebook = new FacebookFactory().getInstance();
+             facebook.setOAuthAppId("1909590085937544", "33ee14f807feb63d582e9314aa2ca6ce");
+             //facebook.setOAuthPermissions(commaSeparetedPermissions);
+             facebook.setOAuthAccessToken(new AccessToken("EAACEdEose0cBAEJuTqwZBm1JZCQ8GPZBjjQxrfNE3YtFxTDtSodiTtUnzf4VAsHXtOWRqSDqkwhoTpZBLGQJ424pfzLJdzgXXzpfJ61SJzPXcEJVFYazXxLV0jOa2qIuDRIs2ZC1QZBzLohJIlYzZCC7XVIChHOyagghNliqjVhXRw9qlyh6TozzfpE2foDalUZD", null));
+             //facebook.postStatusMessage("Hello World from Facebook4J.");
+
+             PostUpdate post = new PostUpdate(new URL("https://www.google.co.in/?gfe_rd=cr&ei=sP6SWLnPLu7s8Aew5oy4Dw"))
+                     .picture(new URL(newsWithImages.get(pos).getImageurl()))
+                     .name(newsWithImages.get(pos).getTitle())
+                     .caption("")
+                     .description(newsWithImages.get(pos).getDiscription());
+             facebook.postFeed(post);
+
+             alert.showAndWait();
+
+
+         }
+         catch(Exception e)
+         {
+
+         }
     }
 
 }
